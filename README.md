@@ -45,3 +45,25 @@ Or maybe get the computers from the past 100 deployments and then get the patche
 ```powershell
 Get-PDQDeployment -Range 100 | Get-PDQHotFix | ? InstalledOn -le (Get-Date).AddDays(-3)
 ```
+
+## Available Commands
+CommandType     Name                                               Version    Source
+-----------     ----                                               -------    ------
+Function        Get-PDQCollection                                  0.3        PSPDQ
+Function        Get-PDQCollectionMembers                           0.3        PSPDQ
+Function        Get-PDQComputer                                    0.3        PSPDQ
+Function        Get-PDQComputerApplications                        0.3        PSPDQ
+Function        Get-PDQDeployment                                  0.3        PSPDQ
+Function        Get-PDQDeploymentSteps                             0.3        PSPDQ
+Function        Get-PDQHotFixes                                    0.3        PSPDQ
+Function        Get-PDQPackage                                     0.3        PSPDQ
+Function        Get-PDQSchedule                                    0.3        PSPDQ
+Function        Get-PDQScheduleTargets                             0.3        PSPDQ
+Function        Get-PDQVariable                                    0.3        PSPDQ
+Function        Get-PSPDQConfig                                    0.3        PSPDQ
+Function        Install-PDQPackage                                 0.3        PSPDQ
+Function        Load-PDQConfig                                     0.3        PSPDQ
+Function        Set-PDQVariable                                    0.3        PSPDQ
+Function        Set-PSPDQConfig                                    0.3        PSPDQ
+Function        Start-PDQCollectionScan                            0.3        PSPDQ
+Function        Start-PDQComputerScan                              0.3        PSPDQ
