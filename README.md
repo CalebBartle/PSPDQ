@@ -53,23 +53,24 @@ Get-PDQDeployment -Range 100 | Get-PDQHotFix | ? InstalledOn -le (Get-Date).AddD
 
 CommandType     Name                                               Version    Source
 -----------     ----                                               -------    ------
-Function        Get-PDQCollection                                  0.3        PSPDQ
-Function        Get-PDQCollectionMembers                           0.3        PSPDQ
-Function        Get-PDQComputer                                    0.3        PSPDQ
-Function        Get-PDQComputerApplications                        0.3        PSPDQ
-Function        Get-PDQDeployment                                  0.3        PSPDQ
-Function        Get-PDQDeploymentSteps                             0.3        PSPDQ
-Function        Get-PDQHotFixes                                    0.3        PSPDQ
-Function        Get-PDQPackage                                     0.3        PSPDQ
-Function        Get-PDQSchedule                                    0.3        PSPDQ
-Function        Get-PDQScheduleTargets                             0.3        PSPDQ
-Function        Get-PDQVariable                                    0.3        PSPDQ
-Function        Get-PSPDQConfig                                    0.3        PSPDQ
-Function        Install-PDQPackage                                 0.3        PSPDQ
-Function        Load-PDQConfig                                     0.3        PSPDQ
-Function        Set-PDQVariable                                    0.3        PSPDQ
-Function        Set-PSPDQConfig                                    0.3        PSPDQ
-Function        Start-PDQCollectionScan                            0.3        PSPDQ
-Function        Start-PDQComputerScan                              0.3        PSPDQ
+Function        Get-PDQCollection                                  1.1.0      PSPDQ
+Function        Get-PDQCollectionMembers                           1.1.0      PSPDQ
+Function        Get-PDQComputer                                    1.1.0      PSPDQ
+Function        Get-PDQComputerApplications                        1.1.0      PSPDQ
+Function        Get-PDQDeployment                                  1.1.0      PSPDQ
+Function        Get-PDQDeploymentSteps                             1.1.0      PSPDQ
+Function        Get-PDQHotFixes                                    1.1.0      PSPDQ
+Function        Get-PDQPackage                                     1.1.0      PSPDQ
+Function        Get-PDQSchedule                                    1.1.0      PSPDQ
+Function        Get-PDQScheduleTargets                             1.1.0      PSPDQ
+Function        Get-PDQVariable                                    1.1.0      PSPDQ
+Function        Get-PSPDQConfig                                    1.1.0      PSPDQ
+Function        Install-PDQPackage                                 1.1.0      PSPDQ
+Function        Load-PDQConfig                                     1.1.0      PSPDQ
+Function        Set-PDQVariable                                    1.1.0      PSPDQ
+Function        Set-PSPDQConfig                                    1.1.0      PSPDQ
+Function        Start-PDQCollectionScan                            1.1.0      PSPDQ
+Function        Start-PDQComputerScan                              1.1.0      PSPDQ
+
 
 ```
