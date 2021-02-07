@@ -1,5 +1,7 @@
-# PSPDQ (beta)
-### **Note: this is still very much WIP and features will be changed/added. PR's welcome.**
+# PSPDQ V1.1.0 (Beta)
+
+This is a continued fork from the Archived version listed here: https://github.com/sysgoblin/PSPDQ/
+This module update includes several changes and is now a dedicated fork.
 
 A powershell module for PDQ Deploy and Inventory administration and querying.
 
@@ -9,7 +11,7 @@ Cmdlets are also included for starting computer or collection scans, as well as 
 
 ## Installation
 ```Powershell
-git clone https://github.com/sysgoblin/PSPDQ
+git clone https://github.com/CalebBartle/PSPDQ/
 cd PSPDQ
 Import-Module .\PSPDQ.psm1
 ```
