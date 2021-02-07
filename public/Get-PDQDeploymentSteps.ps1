@@ -1,30 +1,31 @@
 function Get-PDQDeploymentSteps {
     <#
-.SYNOPSIS
-Returns deployment steps and their results
+        .SYNOPSIS
+            Returns deployment steps and their results
 
-.DESCRIPTION
-Returns deployment steps and their results for the specified deployment ID or all deployment ste
+        .DESCRIPTION
+            Returns deployment steps and their results for the specified deployment ID or all deployment ste
 
-.PARAMETER DeploymentId
-Specifies deployment ID to return steps for
+        .PARAMETER DeploymentId
+            Specifies deployment ID to return steps for
 
-.PARAMETER Computer
-Specifies computer to return steps for (CASE SENSITIVE)
+        .PARAMETER Computer
+            Specifies computer to return steps for (CASE SENSITIVE)
 
-.PARAMETER Credential
-Specifies a user account that has permissions to perform this action.
+        .PARAMETER Credential
+            Specifies a user account that has permissions to perform this action.
 
-.EXAMPLE
-Get-PDQDeployment -Computer WK01 | ? PackageName -like "*Chrome*" | Get-PDQDeploymentSteps
+        .EXAMPLE
+            Get-PDQDeployment -Computer WK01 | ? PackageName -like "*Chrome*" | Get-PDQDeploymentSteps
 
-Returns all deployment steps for any Chrome packages deployed to WK01
+            Returns all deployment steps for any Chrome packages deployed to WK01
 
-.NOTES
-Author: Chris Bayliss
-Version: 1.0
-Date: 12/05/2019
-#>
+        .NOTES
+            Author: Chris Bayliss
+            Updated By Caleb Bartle
+            Version: 1.1
+            Date: 2/6/2021
+    #>
 
     [CmdletBinding(SupportsShouldProcess = $True, DefaultParameterSetName = 'Default')]
     param (
@@ -42,15 +43,8 @@ Date: 12/05/2019
     )
 
     process {
-        if (!(Test-Path -Path "$($env:AppData)\pspdq\config.json")) {
-            Throw "PSPDQ Configuration file not found in `"$($env:AppData)\pspdq\config.json`", please run Set-PSPDQConfig to configure module settings."
-        }
-        else {
-            $config = Get-Content "$($env:AppData)\pspdq\config.json" | ConvertFrom-Json
 
-            $Server = $config.Server.PDQDeployServer
-            $DatabasePath = $config.DBPath.PDQDeployDB
-        }
+        Load-PDQConfig
 
         $Steps = @()
 

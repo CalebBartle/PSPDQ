@@ -1,42 +1,43 @@
 function Get-PDQPackage {
     <#
-.SYNOPSIS
-Get PDQ package information
+        .SYNOPSIS
+            Get PDQ package information
 
-.DESCRIPTION
-Retreives PDQ package information for specified package, approved packages or packages awaiting approval
+        .DESCRIPTION
+            Retreives PDQ package information for specified package, approved packages or packages awaiting approval
 
-.PARAMETER PackageID
-ID of PDQ Deploy package to retreive information on
+        .PARAMETER PackageID
+            ID of PDQ Deploy package to retreive information on
 
-.PARAMETER PackageName
-Name of PDQ Deploy package to retreive information on
+        .PARAMETER PackageName
+            Name of PDQ Deploy package to retreive information on
 
-.PARAMETER Approved
-Returns a list of approved PDQ Deploy packages
+        .PARAMETER Approved
+            Returns a list of approved PDQ Deploy packages
 
-.PARAMETER AwaitingApproval
-Returns a list of PDQ Deploy packages awaiting approval
+        .PARAMETER AwaitingApproval
+            Returns a list of PDQ Deploy packages awaiting approval
 
-.PARAMETER Credential
-Specifies a user account that has permissions to perform this action.
+        .PARAMETER Credential
+            Specifies a user account that has permissions to perform this action.
 
-.EXAMPLE
-Get-PDQPackage -PackageName "Chrome Enterprise 74"
+        .EXAMPLE
+            Get-PDQPackage -PackageName "Chrome Enterprise 74"
 
-PackageID   : 6
-PackageName : Google Chrome Enterprise 74.0.3729.131
-Version     : 74.0.3729.131
-Path        : Packages\Google Chrome Enterprise 74.0.3729.131
-Description : Google Chrome Enterprise (with BOTH 32-bit and 64-bit installers)...
+            PackageID   : 6
+            PackageName : Google Chrome Enterprise 74.0.3729.131
+            Version     : 74.0.3729.131
+            Path        : Packages\Google Chrome Enterprise 74.0.3729.131
+            Description : Google Chrome Enterprise (with BOTH 32-bit and 64-bit installers)...
 
-Returns a list of approved PDQ packages matching the string "Chrome Enterprise 74"
+            Returns a list of approved PDQ packages matching the string "Chrome Enterprise 74"
 
-.NOTES
-Author: Chris Bayliss
-Version: 1.0
-Date: 12/05/2019
-#>
+        .NOTES
+            Author: Chris Bayliss
+            Updated By Caleb Bartle
+            Version: 1.1
+            Date: 2/6/2021
+    #>
 
     [CmdletBinding(SupportsShouldProcess = $True)]
     param (
@@ -60,15 +61,8 @@ Date: 12/05/2019
     )
 
     process {
-        if (!(Test-Path -Path "$($env:AppData)\pspdq\config.json")) {
-            Throw "PSPDQ Configuration file not found in `"$($env:AppData)\pspdq\config.json`", please run Set-PSPDQConfig to configure module settings."
-        }
-        else {
-            $config = Get-Content "$($env:AppData)\pspdq\config.json" | ConvertFrom-Json
-
-            $Server = $config.Server.PDQDeployServer
-            $DatabasePath = $config.DBPath.PDQDeployDB
-        }
+        
+        Load-PDQConfig
 
         if ($PSCmdlet.ParameterSetName -eq 'Waiting') {
             $sql = "SELECT Packages.PackageId, Packages.Name, Packages.Version, LibraryPackageVersions.VersionNumber

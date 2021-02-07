@@ -15,6 +15,9 @@ function Get-PDQCollection {
 
     .NOTES
         Author: Chris Bayliss
+        Updated By Caleb Bartle
+        Version: 1.1
+        Date: 2/6/2021
     #>
 
     [CmdletBinding()]
@@ -43,15 +46,7 @@ function Get-PDQCollection {
 
     process {
 
-        if (!(Test-Path -Path "$($env:AppData)\pspdq\config.json")) {
-            Throw "PSPDQ Configuration file not found in `"$($env:AppData)\pspdq\config.json`", please run Set-PSPDQConfig to configure module settings."
-        }
-        else {
-            $config = Get-Content "$($env:AppData)\pspdq\config.json" | ConvertFrom-Json
-
-            $Server = $config.Server.PDQInventoryServer
-            $DatabasePath = $config.DBPath.PDQInventoryDB
-        }
+        Load-PDQConfig
 
         if ($PSBoundParameters.ContainsKey($Properties)) {
             $defaultProps = 'CollectionId', 'Name', 'Type', 'ComputerCount'

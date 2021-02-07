@@ -1,33 +1,36 @@
 function Get-PDQComputer {
     <#
-.SYNOPSIS
-Returns info for computer held within PDQ Inventory
+    .SYNOPSIS
+        Returns info for computer held within PDQ Inventory
 
-.DESCRIPTION
-Returns info for computer held within PDQ Inventory
+    .DESCRIPTION
+        Returns info for computer held within PDQ Inventory
 
-.PARAMETER All
-Switch. Will pull all results from PDQ Inventory.
+    .PARAMETER All
+        Switch. Will pull all results from PDQ Inventory.
 
-.PARAMETER Computer
-Defines computer(s) to return results for.
+    .PARAMETER Computer
+        Defines computer(s) to return results for.
 
-.PARAMETER User
-If specified, results will only contain computers which the user is accessing.
+    .PARAMETER User
+        If specified, results will only contain computers which the user is accessing.
 
-.PARAMETER Properties
-Specifies properties to include in results.
+    .PARAMETER Properties
+        Specifies properties to include in results.
 
-.PARAMETER Credential
-Specifies a user account that has permissions to perform this action.
+    .PARAMETER Credential
+        Specifies a user account that has permissions to perform this action.
 
-.EXAMPLE
-Get-PDQComputer -Computer WK01
-Returns PDQ Inventory information for WK01
+    .EXAMPLE
+        Get-PDQComputer -Computer WK01
+        Returns PDQ Inventory information for WK01
 
-.NOTES
-Author: Chris Bayliss
-#>
+    .NOTES
+        Author: Chris Bayliss
+        Updated By Caleb Bartle
+        Version: 1.1
+        Date: 2/6/2021
+    #>
 
     [CmdletBinding(DefaultParameterSetName = 'Default', SupportsShouldProcess = $True)]
     param (
@@ -61,15 +64,7 @@ Author: Chris Bayliss
 
     process {
 
-        if (!(Test-Path -Path "$($env:AppData)\pspdq\config.json")) {
-            Throw "PSPDQ Configuration file not found in `"$($env:AppData)\pspdq\config.json`", please run Set-PSPDQConfig to configure module settings."
-        }
-        else {
-            $config = Get-Content "$($env:AppData)\pspdq\config.json" | ConvertFrom-Json
-
-            $Server = $config.Server.PDQInventoryServer
-            $DatabasePath = $config.DBPath.PDQInventoryDB
-        }
+        Load-PDQConfig
 
         if ($PSBoundParameters.ContainsKey('Properties')) {
             $defaultProps = "ComputerId", "Name", "Model", "OSName", "OSServicePack"

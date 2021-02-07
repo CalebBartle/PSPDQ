@@ -1,31 +1,33 @@
 ﻿function Get-PDQVariable {
- <#
-    .SYNOPSIS
-        Get PDQ Variable information
+     <#
+        .SYNOPSIS
+            Get PDQ Variable information
     
-    .DESCRIPTION
-        Retreives PDQ Custom Variable information and stores into a PS Table
+        .DESCRIPTION
+            Retreives PDQ Custom Variable information and stores into a PS Table
     
-    .PARAMETER Name
-        Specifies the name of the variable to search the DB for.
+        .PARAMETER Name
+            Specifies the name of the variable to search the DB for.
 
-    .PARAMETER Credential
-        Specifies a user account that has permissions to perform this action.
+        .PARAMETER Credential
+            Specifies a user account that has permissions to perform this action.
 
-    .EXAMPLE
-        Get-PDQVariable -Name "GoogleChromeVersion"
+        .EXAMPLE
+            Get-PDQVariable -Name "GoogleChromeVersion"
     
-        VarNumber   : 2
-        VarName     : GoogleChromeVersion
-        Value       : 80.1.1.2
-        TimeCreated : 2021-02-06 14:15:07
-        LastUpdated : 2021-02-06 14:15:29
+            VarNumber   : 2
+            VarName     : GoogleChromeVersion
+            Value       : 80.1.1.2
+            TimeCreated : 2021-02-06 14:15:07
+            LastUpdated : 2021-02-06 14:15:29
 
-        Using Get-PDQVariable will list all available Custom Variables in the PDQ database
+            Using Get-PDQVariable will list all available Custom Variables in the PDQ database
 
-    .NOTES
-        Author: Caleb Bartle
-#>
+         .NOTES
+            Author: Caleb Bartle
+            Version: 1.1
+            Date: 2/6/2021
+    #>
     [CmdletBinding(SupportsShouldProcess = $True)]
     param (
         [Parameter(Mandatory = $false,
@@ -36,15 +38,8 @@
     )
 
     process {
-        if (!(Test-Path -Path "$($env:AppData)\pspdq\config.json")) {
-            Throw "PSPDQ Configuration file not found in `"$($env:AppData)\pspdq\config.json`", please run Set-PSPDQConfig to configure module settings."
-        }
-        else {
-            $config = Get-Content "$($env:AppData)\pspdq\config.json" | ConvertFrom-Json
-
-            $Server = $config.Server.PDQDeployServer
-            $DatabasePath = $config.DBPath.PDQDeployDB
-        }
+        
+        Load-PDQConfig
 
         if ($PSCmdlet.ParameterSetName -eq 'Name') {
             $sql = "SELECT *
@@ -57,7 +52,7 @@
             FROM CustomVariables;"
         }
 
-        if (!(Test-Path -Path "\\$($Server)\c$\ProgramData\Admin Arsenal\PDQ Deploy\Database.db")) {
+        if (!(Test-Path -Path $config.DBPath.PDQDeployDB)) {
             Write-Error -Message "Unable to locate database. Ensure you have access and the path entered is correct."
         }
 

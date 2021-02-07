@@ -18,8 +18,9 @@ function Get-PDQDeployment {
 
     .NOTES
         Author: Chris Bayliss
-        Version: 1.0
-        Date: 12/05/2019
+        Updated By Caleb Bartle
+        Version: 1.1
+        Date: 2/6/2021
     #>
 
     [CmdletBinding(SupportsShouldProcess = $True)]
@@ -58,15 +59,7 @@ function Get-PDQDeployment {
 
     process {
 
-        if (!(Test-Path -Path "$($env:AppData)\pspdq\config.json")) {
-            Throw "PSPDQ Configuration file not found in `"$($env:AppData)\pspdq\config.json`", please run Set-PSPDQConfig to configure module settings."
-        }
-        else {
-            $config = Get-Content "$($env:AppData)\pspdq\config.json" | ConvertFrom-Json
-
-            $Server = $config.Server.PDQDeployServer
-            $DatabasePath = $config.DBPath.PDQDeployDB
-        }
+        Load-PDQConfig
 
         $Deployments = @()
 

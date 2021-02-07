@@ -1,48 +1,42 @@
 function Install-PDQPackage {
     <#
-.SYNOPSIS
-Triggers deployment of PDQ package to specified target(s)
+        .SYNOPSIS
+            Triggers deployment of PDQ package to specified target(s)
 
-.DESCRIPTION
-Starts deployment of specified PDQ Packages either by ID number or matching name, to specified target computers.
-If an exact match is not found for package name, any matches will be listed and the user will be prompted to select the corresponding ID for the package they wish to deploy.
+        .DESCRIPTION
+            Starts deployment of specified PDQ Packages either by ID number or matching name, to specified target computers.
+            If an exact match is not found for package name, any matches will be listed and the user will be prompted to select the corresponding ID for the package they wish to deploy.
 
-.PARAMETER Computer
-Target machine(s) to deploy package to
+        .PARAMETER Computer
+            Target machine(s) to deploy package to
 
-.PARAMETER PackageID
-ID number of package to deploy
+        .PARAMETER PackageID
+            ID number of package to deploy
 
-.PARAMETER PackageName
-Name of package to deploy
+        .PARAMETER PackageName
+            Name of package to deploy
 
-.PARAMETER Credential
-Specifies a user account that has permissions to perform this action.
+        .PARAMETER Credential
+            Specifies a user account that has permissions to perform this action.
+      
+        .EXAMPLE
+            Install-PDQPackage -Computer WK01 -PackageName Chrome
+            PackageID PackageName                            Version
+            --------- -----------                            -------
+            6         Google Chrome Enterprise 74.0.3729.131 74.0.3729.131
+            47        Google Chrome Enterprise 73.0.3683.86  73.0.3683.86
+            58        Google Chrome Enterprise 73.0.3683.103 73.0.3683.103
+            65        Google Chrome Enterprise 74.0.3729.108 74.0.3729.108
 
-.EXAMPLE
-Install-PDQPackage -Computer WK01, WK02 -PackageID 101
-Deployes package with ID 101 to targets WK01, WK02
+            Multiple matches, select Package ID: 6
 
-.EXAMPLE
-Install-PDQPackage -Computer WK01 -PackageName Chrome
-PackageID PackageName                            Version
---------- -----------                            -------
-6         Google Chrome Enterprise 74.0.3729.131 74.0.3729.131
-47        Google Chrome Enterprise 73.0.3683.86  73.0.3683.86
-58        Google Chrome Enterprise 73.0.3683.103 73.0.3683.103
-65        Google Chrome Enterprise 74.0.3729.108 74.0.3729.108
+            Deploys package 6 to target WK01. As "Chrome" as a string matches multiple packages, the user was prompted to choose from those available.
 
-Multiple matches, select Package ID: 6
-
-Deploys package 6 to target WK01. As "Chrome" as a string matches multiple packages, the user was prompted to choose from those available.
-
-.NOTES
-Author: Chris Bayliss
-Version: 1.0
-Date: 12/05/2019
-#>
-
-
+        .NOTES
+            Author: Chris Bayliss | Caleb Bartle
+            Version: 1.1
+            Date: 2/6/2021
+    #>
     [CmdletBinding(SupportsShouldProcess = $True)]
     param (
         [Parameter(Mandatory = $true,
@@ -64,15 +58,7 @@ Date: 12/05/2019
 
     process {
 
-        if (!(Test-Path -Path "$($env:AppData)\pspdq\config.json")) {
-            Throw "PSPDQ Configuration file not found in `"$($env:AppData)\pspdq\config.json`", please run Set-PSPDQConfig to configure module settings."
-        }
-        else {
-            $config = Get-Content "$($env:AppData)\pspdq\config.json" | ConvertFrom-Json
-
-            $Server = $config.Server.PDQDeployServer
-            $DatabasePath = $config.DBPath.PDQDeployDB
-        }
+        Load-PDQConfig
 
         if ($PSCmdlet.ParameterSetName -eq 'ID') {
             $Package = @()

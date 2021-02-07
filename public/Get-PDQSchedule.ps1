@@ -1,39 +1,51 @@
 function Get-PDQSchedule {
+    <#
+        .SYNOPSIS
+            Returns PDQ Schedules
+
+        .DESCRIPTION
+            Returns PDQ Schedule Infomration
+
+        .PARAMETER ScheduleName
+            Returns all Schedules with the specified Schedule Name
+
+        .PARAMETER ScheduleId
+            Returns all Schedules with the specified Schedule Id
+
+        .EXAMPLE
+            Get-PDQSchedule -ScheduleName 'Weekend-ChromeDeployment'
+            
+            ScheduleId   : 1
+            ScheduleName : Weekend-ChromeDeployment
+            PackageId    : 1
+            PackageName  : Install Chrome
+            TriggerType  : Once
+            IsEnabled    : 1
+
+            *Get-PDQSchedule Returns all Schedules
+
+        .NOTES
+            Author: Chris Bayliss | Caleb Bartle
+            Version: 1.1
+            Date: 2/6/2021
+    #>
 
     [CmdletBinding(DefaultParameterSetName = 'Default', SupportsShouldProcess = $True)]
     param (
-        # Returns all information
-        [Parameter(Mandatory = $false,
-            ParameterSetName = 'All')]
-        [switch]$All,
-
         # Returns information for computer(s) where the specified user is or has been active
         [Parameter(Mandatory = $false,
-            ParameterSetName = 'Package')]
+            ParameterSetName = 'ScheduleName')]
         [string[]]$ScheduleName,
 
         [Parameter(Mandatory = $false,
-            ParameterSetName = 'Package')]
+            ParameterSetName = 'ScheduleId')]
         [int[]]$ScheduleId,
-
-        [Parameter(Mandatory = $false)]
-        [ValidateSet('')]
-        [string[]]$Properties,
 
         [PSCredential]$Credential
     )
-
     process {
 
-        if (!(Test-Path -Path "$($env:AppData)\pspdq\config.json")) {
-            Throw "PSPDQ Configuration file not found in `"$($env:AppData)\pspdq\config.json`", please run Set-PSPDQConfig to configure module settings."
-        }
-        else {
-            $config = Get-Content "$($env:AppData)\pspdq\config.json" | ConvertFrom-Json
-
-            $Server = $config.Server.PDQDeployServer
-            $DatabasePath = $config.DBPath.PDQDeployDB
-        }
+        Load-PDQConfig
 
         if ($PSBoundParameters.ContainsKey('Properties')) {
             $defaultProps = "Schedules.ScheduleId", "Schedules.Name", "Packages.PackageId", "Packages.Name", "ScheduleTriggers.TriggerType", "ScheduleTriggers.IsEnabled"
@@ -45,21 +57,20 @@ function Get-PDQSchedule {
 
         $Schedules = @()
 
-        if ($PSCmdlet.ParameterSetName -eq 'All') {
-            $sql = "SELECT " + ($allProps -join ', ') + "
-                    FROM Schedules
-                    INNER JOIN SchedulePackages ON SchedulePackages.ScheduleId = Schedules.ScheduleId
-                    INNER JOIN Packages ON Packages.PackageId = SchedulePackages.LocalPackageId
-                    INNER JOIN ScheduleTriggers ON ScheduleTriggers.ScheduleTriggerSetId = Schedules.ScheduleTriggerSetId"
+        $sql = "SELECT " + ($allProps -join ', ') + "
+                FROM Schedules
+                INNER JOIN SchedulePackages ON SchedulePackages.ScheduleId = Schedules.ScheduleId
+                INNER JOIN Packages ON Packages.PackageId = SchedulePackages.LocalPackageId
+                INNER JOIN ScheduleTriggers ON ScheduleTriggers.ScheduleTriggerSetId = Schedules.ScheduleTriggerSetId"
 
-            $icmParams = @{
-                Computer     = $Server
-                ScriptBlock  = { $args[0] | sqlite3.exe $args[1] }
-                ArgumentList = $sql, $DatabasePath
-            }
-            if ($Credential) { $icmParams['Credential'] = $Credential }
-            $Schedules += Invoke-Command @icmParams
+        $icmParams = @{
+            Computer     = $Server
+            ScriptBlock  = { $args[0] | sqlite3.exe $args[1] }
+            ArgumentList = $sql, $DatabasePath
         }
+        if ($Credential) { $icmParams['Credential'] = $Credential }
+        $Schedules += Invoke-Command @icmParams
+        
 
         # obj builder
         $schedulesParsed = @()
@@ -82,6 +93,14 @@ function Get-PDQSchedule {
             $schedulesParsed += $schedObj
         }
 
-        $schedulesParsed
+        if (($PSCmdlet.ParameterSetName -ne 'ScheduleName') -and (($PSCmdlet.ParameterSetName -ne 'ScheduleId'))) {
+            $schedulesParsed
+        }
+        if($PSCmdlet.ParameterSetName -eq 'ScheduleName'){
+            $schedulesParsed.Where({$_.ScheduleName -eq [string]$ScheduleName })
+        }
+        if($PSCmdlet.ParameterSetName -eq 'ScheduleId'){
+            $schedulesParsed.Where({$_.ScheduleId -eq $ScheduleId })
+        }
     }
 }

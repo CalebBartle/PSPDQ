@@ -1,36 +1,37 @@
 function Get-PDQHotFixes {
     <#
-.SYNOPSIS
-Get information on hotfix/patches installed on specified target
+        .SYNOPSIS
+            Get information on hotfix/patches installed on specified target
 
-.DESCRIPTION
-Retreives information on all hotfixes/patches installed on the target systems which have been scanned by PDQ Inventory.
+        .DESCRIPTION
+            Retreives information on all hotfixes/patches installed on the target systems which have been scanned by PDQ Inventory.
 
-.PARAMETER Computer
-Target computer to return hotfix/patch information for
+        .PARAMETER Computer
+            Target computer to return hotfix/patch information for
 
-.PARAMETER HotFix
-Specified hotfix/patch to return information for
+        .PARAMETER HotFix
+            Specified hotfix/patch to return information for
 
-.PARAMETER Credential
-Specifies a user account that has permissions to perform this action.
+        .PARAMETER Credential
+            Specifies a user account that has permissions to perform this action.
 
 
-.EXAMPLE
-Get-PDQHotFixes -Computer WK01
+        .EXAMPLE
+            Get-PDQHotFixes -Computer WK01
 
-Returns all patches installed on WK01
+            Returns all patches installed on WK01
 
-.EXAMPLE
-Get-PDQHotFixes -HotFix KB000001
+        .EXAMPLE
+            Get-PDQHotFixes -HotFix KB000001
 
-Returns a list of machines which have patch "KB00001" installed
+            Returns a list of machines which have patch "KB00001" installed
 
-.NOTES
-Author: Chris Bayliss
-Version: 1.0
-Date: 12/05/2019
-#>
+        .NOTES
+            Author: Chris Bayliss
+            Updated By Caleb Bartle
+            Version: 1.1
+            Date: 2/6/2021
+    #>
 
     [CmdletBinding(DefaultParameterSetName = 'Default')]
     param (
@@ -49,15 +50,8 @@ Date: 12/05/2019
     )
 
     process {
-        if (!(Test-Path -Path "$($env:AppData)\pspdq\config.json")) {
-            Throw "PSPDQ Configuration file not found in `"$($env:AppData)\pspdq\config.json`", please run Set-PSPDQConfig to configure module settings."
-        }
-        else {
-            $config = Get-Content "$($env:AppData)\pspdq\config.json" | ConvertFrom-Json
-
-            $Server = $config.Server.PDQInventoryServer
-            $DatabasePath = $config.DBPath.PDQInventoryDB
-        }
+        
+        Load-PDQConfig
 
         if ($PSCmdlet.ParameterSetName -eq 'Comp') {
             $sql = "SELECT hotfixes.hotfixid, hotfixes.computerid, computers.name, hotfixes.name, hotfixes.Description, hotfixes.InstalledOn, hotfixes.InstalledBy, hotfixes.Program, hotfixes.Version, hotfixes.Publisher, hotfixes.HelpLink
