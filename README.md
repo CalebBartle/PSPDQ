@@ -10,11 +10,17 @@ It can be utilised for querying the PDQ Sqlite db's directly without needing to 
 Cmdlets are also included for starting computer or collection scans, as well as deploying named packages from within Powershell. (Please note, these cmdlets will require PDQ Deploy and Inventory to be installed locally as client or server)
 
 ## Installation
+### Using Git
 ```Powershell
 git clone https://github.com/CalebBartle/PSPDQ/
 cd PSPDQ
 Import-Module .\PSPDQ.psm1
 ```
+### Install from PSGallery
+```Powershell
+Install-Module -Name PSPDQ
+```
+
 If you don't have PDQ Deploy/Inventory installed you may also need to install sqlite3. `https://www.sqlite.org/download.html`
 
 The first cmdlet you should run is: `Set-PSPDQConfig` to configure the PDQ Deploy and Inventory server information.
