@@ -48,6 +48,7 @@ Get-PDQDeployment -Range 100 | Get-PDQHotFix | ? InstalledOn -le (Get-Date).AddD
 
 ## Available Commands
 ```powershell
+
 CommandType     Name                                               Version    Source
 -----------     ----                                               -------    ------
 Function        Get-PDQCollection                                  0.3        PSPDQ
@@ -68,4 +69,5 @@ Function        Set-PDQVariable                                    0.3        PS
 Function        Set-PSPDQConfig                                    0.3        PSPDQ
 Function        Start-PDQCollectionScan                            0.3        PSPDQ
 Function        Start-PDQComputerScan                              0.3        PSPDQ
+
 ```
