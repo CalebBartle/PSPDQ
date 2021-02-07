@@ -1,4 +1,4 @@
-﻿@{
+@{
 
     # Script module or binary module file associated with this manifest.
     RootModule        = 'PSPDQ.psm1'
@@ -13,16 +13,15 @@
     GUID              = '2919f2bc-75a2-430d-9daa-860c29af9d78'
 
     # Author of this module
-    Author            = 'Chris Bayliss' + 'Caleb Bartle'
+    Author            = ' Chris Bayliss ' + ' Caleb Bartle '
 
     # Description of the functionality provided by this module
     Description       = 'This module is designed for remote, programmatic querying of PDQ Inventory and PDQ Deploy.
-You can also deploy packages to individual targets or collections, and scan individual targets or collections however this requires a local "client" install of the PDQ suite.
-
-If this is to be used by someone without PDQ Deploy/Inventory locally installed the following cmdlets will not be able to be utilised:
-Install-PDQPackage
-Start-PDQCollectionScan
-Start-PDQComputerScan'
+    You can also deploy packages to individual targets or collections, and scan individual targets or collections however this requires a local "client" install of the PDQ suite.
+    If this is to be used by someone without PDQ Deploy/Inventory locally installed the following cmdlets will not be able to be utilised:
+    Install-PDQPackage
+    Start-PDQCollectionScan
+    Start-PDQComputerScan'
 
     # Minimum version of the Windows PowerShell engine required by this module
     # PowerShellVersion = ''
@@ -78,7 +77,8 @@ Start-PDQComputerScan'
         'Start-PDQCollectionScan',
         'Start-PDQComputerScan',
         'Get-PDQVariable',
-        'Set-PDQVariable'
+        'Set-PDQVariable',
+	'Load-PDQConfig'
     )
 
     # Cmdlets to export from this module, for best performance, do not use wildcards and do not delete the entry, use an empty array if there are no cmdlets to export.
@@ -130,4 +130,3 @@ Start-PDQComputerScan'
     # DefaultCommandPrefix = ''
 
 }
-
