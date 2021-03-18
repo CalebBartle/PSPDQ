@@ -32,12 +32,12 @@ Set-PSPDQConfig -PDQDeployServer PDQSERVER1 -PDQInventoryServer PDQSERVER2 -PDQD
 ## Examples
 Get the last 10 deployments and their status:
 ```powershell
-Get-PDQDeployment -Range 10
+Get-PDQDeployment -Recent 10
 ```
 
 Get the basic computer details of each computer the last 10 deployments went to:
 ```powershell
-Get-PDQDeployment -Range 10 | Get-PDQComputer
+Get-PDQDeployment -Recent 10 | Get-PDQComputer
 ```
 Get basic details on a computer and see if it's online:
 ```powershell
@@ -51,7 +51,7 @@ Get-PDQComputerApplications -Computer WK01, WK02
 
 Or maybe get the computers from the past 100 deployments and then get the patches for each that were installed in the past 3 days because why not?
 ```powershell
-Get-PDQDeployment -Range 100 | Get-PDQHotFix | ? InstalledOn -le (Get-Date).AddDays(-3)
+Get-PDQDeployment -Recent 100 | Get-PDQHotFix | ? InstalledOn -le (Get-Date).AddDays(-3)
 ```
 
 ## Available Commands
